@@ -26,9 +26,10 @@ on init
 
     # setup the global environment
     export PATH /system/sbin:/system/bin:/system/xbin:/sbin:/bin:/vendor/bin
-    export LD_LIBRARY_PATH /system/lib:/lib:/usr/lib:/system/lib/ste_omxcomponents/:/vendor/lib
+    export LD_LIBRARY_PATH /system/lib:/lib:/usr/lib:/system/lib/ste_omxcomponents:/vendor/lib
     export OMX_STE_ENS_COMPONENTS_DIR /system/lib/ste_omxcomponents/
     export OMX_BELLAGIO_LOADER_REGISTRY /system/etc/omxloaders
+    export OMX_STE_CSCALL_COMPONENTS_DIR /system/lib/ste_omxcomponents/
 
     # Vibetonz
     export VIBE_PIPE_PATH /dev/pipes
@@ -62,6 +63,21 @@ on post-fs
 
     chown radio radio /modemfs
     chmod 0771 /modemfs
+    chown radio radio /modemfs/APPL
+    mkdir /modemfs/APPL
+    chmod 0755 /modemfs/APPL
+    mkdir /modemfs/BOOT
+    chown radio radio /modemfs/BOOT
+    chmod 0755 /modemfs/BOOT
+    mkdir /modemfs/DO
+    chown radio radio /modemfs/DO
+    chmod 0755 /modemfs/DO
+    mkdir /modemfs/LOG
+    chown radio radio /modemfs/LOG
+    chmod 0755 /modemfs/LOG
+    mkdir /modemfs/TMP
+    chown radio radio /modemfs/TMP
+    chmod 0755 /modemfs/TMP
     chown radio radio /modemfs/CONF
     chmod 0755 /modemfs/CONF
     chown radio radio /modemfs/CONF/MCE
@@ -84,7 +100,8 @@ on post-fs
     chown radio system /efs/imei
     chmod 0770 /efs/imei
     chown radio system /efs/bluetooth
-    chown system system /efs/wifi
+    chown radio system /efs/wifi
+    mkdir /data/mediaserver 0740 media media
 
     # Samsung Device permissions
     chown root system /dev/mmc328x
@@ -199,13 +216,23 @@ on post-fs
 
 on post-fs-data
 
+
+    mkdir /data/media 0770 media_rw media_rw
+    chown media_rw media_rw /data/media
     # give system access to wpa_supplicant.conf for backup and restore
+    mkdir /data/misc/psdata
+    mkdir /data/misc/bluetoothd 0770 bluetooth bluetooth
+    mkdir /data/misc/bluetooth 0770 system system
     mkdir /data/misc/wifi 0770 wifi system
-    mkdir /efs/wifi 0775 radio system
-    mkdir /efs/bluetooth 0775 radio system
-    mkdir /efs/imei 0775 radio system
-    chmod 0660 /data/misc/wifi/wpa_supplicant.conf
     mkdir /data/misc/wifi/sockets 0770 wifi wifi
+    mkdir /data/misc/dhcp 0775 dhcp dhcp
+    mkdir /data/misc/wifi 0770 wifi system
+    chmod 0770 /data/misc/wifi
+    chmod 0660 /data/misc/wifi/wpa_supplicant.conf
+    chmod 0660 /data/misc/wifi/p2p_supplicant.conf
+    mkdir /data/misc/wifi/hostapd.sockets 0770 wifi wifi
+     
+
     mkdir /data/misc/dhcp 0775 dhcp dhcp
     chown dhcp dhcp /data/misc/dhcp
     chown system system /efs/wifi/.mac.info
@@ -225,6 +252,9 @@ on post-fs-data
     chmod 0775 /data/log
     chmod 0775 /data/anr
 
+
+    # After we setup wireless subsystem, let dnsmasq create files for soft ap
+    chown dhcp system /data/misc/dhcp
 #[ SEC_MM_DRM
     # DRM directory creation
     mkdir /system/etc/security/.drm 0775
@@ -268,7 +298,7 @@ on post-fs-data
     chown root radio /data/misc/ril_config
 
     # Create directory for STE OMX debug logs
-    mkdir /data/ste-debug 0775 system system
+    mkdir /data/ste-debug 0777 root root
 
     # give system access to sterc_script when enabling usb nap
     copy -u /system/etc/psdata/sterc_conf /data/misc/psdata/sterc_conf
@@ -375,40 +405,35 @@ on boot
 
     chown root system sys/class/sec/gps/GPS_nRST/value
     chmod 0664 sys/class/sec/gps/GPS_nRST/value
-
+    
 # permissions for FMRadio of Broadcom
     chmod 0777 /system/bin/btld
 
 # Peremissions for bluetooth
     # UART device
-    chown bluetooth bluetooth /dev/ttyAMA0
+    chown bluetooth net_bt_stack /dev/ttyAMA0
     chmod 0660 /dev/ttyAMA0
 
 # for bluetooth. change access rights as btld runs as bluetooth user
-    chown root bluetooth /sys/class/rfkill/rfkill0
-    chown root bluetooth /sys/class/rfkill/rfkill0/state
-    chown root bluetooth /sys/class/rfkill/rfkill0/claim	
-    chown root bluetooth /sys/class/rfkill/rfkill0/soft
-    chown root bluetooth /sys/class/rfkill/rfkill0/type
+    chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0
+    chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/claim	
+    chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/soft
     chmod 0664 /sys/class/rfkill/rfkill0/state
     chmod 0664 /sys/class/rfkill/rfkill0/claim
     chmod 0664 /sys/class/rfkill/rfkill0/soft
-    chmod 0664 /sys/class/rfkill/rfkill0/type
     setprop service.brcm.bt.pbap_mode btld
 
 # power up/down interface
+    chmod 0660 /sys/class/rfkill/rfkill0/type
     chmod 0660 /sys/class/rfkill/rfkill0/state
-    chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
-    chown bluetooth bluetooth /sts/class/rfkill/rfkill0/type
+    chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/state
+    chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/type
 
 # bluetooth MAC address programming
     setprop ro.bt.bdaddr_path "/efs/bluetooth/bt_addr"
     chown bluetooth bluetooth ro.bt.bdaddr_path
     chown bluetooth bluetooth /system/etc/bt_addr
     chmod 0644 /efs/bluetooth/addr.txt
-
-    chown bluetooth /dev/ttyAMA0
-    chmod 0660 /dev/ttyAMA0
 
     # Permissions for LCD
     chown system system /sys/class/backlight/panel/brightness
@@ -433,14 +458,34 @@ on boot
     # temp Torch workaround
     chmod 0222 /sys/class/sec/flash/enable
     
-    # fbearlysuspend module parameters permissions
-    chown system system /sys/module/fbearlysuspend/parameters/fbdelay
-    chown system system /sys/module/fbearlysuspend/parameters/fbdelay_ms
-    chown system system /sys/module/fbearlysuspend/parameters/fbdelay_first
-    chown system system /sys/module/fbearlysuspend/parameters/fbdelay_first_ms
-    
-    # deepest sleep state fix for device parts
+    # system permissions for device parts
+    chown system system /sys/module/mali/parameters/mali_l2_max_reads
+    chown system system /sys/module/mali/parameters/pre_allocated_memory_size_max
     chown system system /d/cpuidle/deepest_state
+    chown system system /sys/kernel/abb-regu/VOTG
+    chown system system /sys/kernel/abb-charger/max_ac_c
+    chown system system /sys/kernel/abb-charger/max_usb_c
+    chown system system /sys/kernel/fsync/mode
+    chown system system /sys/kernel/mxt224e/sweep2wake
+    chown system system /sys/module/mmc_core/parameters/use_spi_crc
+    chown system system /sys/kernel/mxt224e/threshold_t48
+    write /sys/kernel/mxt224e/threshold_t48 on
+    
+
+ # Define TCP buffer sizes for various networks
+ #   ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax,
+ 
+    setprop net.tcp.buffersize.default 4096,87380,704512,4096,16384,110208
+    setprop net.tcp.buffersize.lte     4096,87380,1220608,4096,16384,563200
+    setprop net.tcp.buffersize.umts    4096,87380,563200,4096,16384,110208
+    setprop net.tcp.buffersize.hspa    4096,87380,704512,4096,16384,110208
+    setprop net.tcp.buffersize.hsupa   4096,87380,704512,4096,16384,262144
+    setprop net.tcp.buffersize.hsdpa   4096,87380,704512,4096,16384,262144
+    setprop net.tcp.buffersize.hspap   4096,87380,1220608,4096,16384,393216
+    setprop net.tcp.buffersize.edge    4096,26280,35040,4096,16384,35040
+    setprop net.tcp.buffersize.gprs    4096,8760,11680,4096,8760,11680
+    setprop net.tcp.buffersize.evdo    4096,87380,563200,4096,16384,262144
+    setprop net.tcp.buffersize.evdo_b  4096,87380,704512,4096,16384,262144
 
     # camera debug
     setprop persist.debug.extcamera.level 777
@@ -507,6 +552,52 @@ service modem-supervisor /system/bin/modem-supervisor -f /dev/dbx500_mloader_fw 
 service copsd /system/bin/copsdaemon
     class modem-core
     user root
+
+service bdaddr /system/bin/bdaddr_read
+    class main
+    user root
+    disabled
+    oneshot
+
+service dbus /system/bin/dbus-daemon --system --nofork
+    socket dbus stream 660 bluetooth bluetooth
+    user bluetooth
+    group bluetooth net_bt_admin
+
+service bluetoothd /system/bin/bluetoothd -n
+    socket bluetooth stream 660 bluetooth bluetooth
+    socket dbus_bluetooth stream 660 bluetooth bluetooth
+    # init.rc does not yet support applying capabilities, so run as root and
+    # let bluetoothd drop uid to bluetooth with the right linux capabilities
+    group bluetooth net_bt_admin misc
+    disabled
+
+service hfag /system/bin/sdptool add --channel=10 HFAG
+    user bluetooth
+    group bluetooth net_bt_admin
+    disabled
+    oneshot
+
+service hsag /system/bin/sdptool add --channel=11 HSAG
+    user bluetooth
+    group bluetooth net_bt_admin
+    disabled
+    oneshot
+
+service opush /system/bin/sdptool add --channel=12 OPUSH
+    user bluetooth
+    group bluetooth net_bt_admin
+    disabled
+    oneshot
+
+service pbap /system/bin/sdptool add --channel=19 PBAP
+    user bluetooth
+    group bluetooth net_bt_admin
+    disabled
+    oneshot
+
+on property:ril.bt_macaddr=*
+    start bdaddr
 
 # Modem_log_relay
 service modem_log_relay /system/bin/modem_log_relay --ctrl_port=2001 --data_port=2002 --inv_port=2003 --report_port=2005
@@ -579,25 +670,29 @@ service immvibed /system/bin/immvibed
     group shell
     oneshot
 
+service mtpd /system/bin/mtpd
+    socket mtpd stream 600 system system
+    user vpn
+    group vpn net_admin net_raw
+    disabled
+    oneshot
+
 on property:ro.dumpstate.dmesg=1
     write /proc/sys/kernel/dmesg_restrict 0
-
-service p2p_supplicant /system/bin/wpa_supplicant \
-        -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf -N \
-        -ip2p0 -Dnl80211 -c/data/misc/wifi/p2p_supplicant.conf -e/data/misc/wifi/entropy.bin \
-        -puse_p2p_group_interface=1
+    
+    
+service wpa_supplicant /system/bin/wpa_supplicant -Dnl80211 -iwlan0 -puse_p2p_group_interface=1 -e/data/misc/wifi/entropy.bin
     class main
     socket wpa_wlan0 dgram 660 wifi wifi
     disabled
     oneshot
 
-service wpa_supplicant /system/bin/wpa_supplicant \
-        -Dnl80211 -iwlan0 -e/data/misc/wifi/entropy.bin \
-        -c/data/misc/wifi/wpa_supplicant.conf
+service p2p_supplicant /system/bin/wpa_supplicant -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf -N -ip2p0 -Dnl80211 -c/data/misc/wifi/p2p_supplicant.conf -e/data/misc/wifi/entropy.bin -puse_p2p_group_interface=1
     class main
     socket wpa_wlan0 dgram 660 wifi wifi
     disabled
     oneshot
+
 
 service dhcpcd_wlan0 /system/bin/dhcpcd -ABKL
     class main
@@ -609,10 +704,15 @@ service dhcpcd_p2p /system/bin/dhcpcd -aABKL
     disabled
     oneshot
 
-service dhcpcd_bnep0 /system/bin/dhcpcd -ABKL
+service dhcpcd_bnep0 /system/bin/dhcpcd -BKLG
+    # This properly enables bluetooth tethering, it asigns a IP to any conected device
     class main
     disabled
     oneshot
+
+on property:ro.data.large_tcp_window_size=true
+    # We enable receiving of high-speed conections via ipv4
+    write /proc/sys/net/ipv4/tcp_adv_win_scale  1
 
 service iprenew_wlan0 /system/bin/dhcpcd -n
     class main
@@ -628,6 +728,12 @@ service iprenew_bnep0 /system/bin/dhcpcd -n
     class main
     disabled
     oneshot
+    
+service gpsd /system/bin/gpsd -c /system/etc/gps.xml
+    class main
+    user gps
+    group system net_raw
+    ioprio be 0
 
 #for WiFi MFG(TestMode)
 service mfgloader /system/bin/mfgloader
