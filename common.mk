@@ -59,10 +59,10 @@ PRODUCT_COPY_FILES += \
 # Packages
 PRODUCT_PACKAGES += \
     audio.a2dp.default \
-	libasound \
-	libomxil-bellagio \
-	libblt_hw \
-	power.montblanc \
+    libasound \
+    libomxil-bellagio \
+    libblt_hw \
+    power.montblanc \
     audio.usb.default \
     com.android.future.usb.accessory \
     libaudioutils \
