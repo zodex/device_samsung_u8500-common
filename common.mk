@@ -17,6 +17,19 @@ COMMON_PATH := device/samsung/u8500-common
 
 DEVICE_PACKAGE_OVERLAYS := $(COMMON_PATH)/overlay
 
+# Packages
+PRODUCT_PACKAGES += \
+    audio.a2dp.default \
+    libomxil-bellagio \
+    libblt_hw \
+    power.montblanc \
+    audio.usb.default \
+    com.android.future.usb.accessory \
+    libaudioutils \
+    libtinyalsa \
+    SamsungServiceMode \
+    Torch
+
 # Init files
 PRODUCT_COPY_FILES += \
     $(COMMON_PATH)/rootdir/lpm.rc:root/lpm.rc
@@ -55,20 +68,6 @@ $(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/firmware/bcm4330
 # Gps
 PRODUCT_COPY_FILES += \
     $(COMMON_PATH)/configs/sirfgps.conf:system/etc/sirfgps.conf
-
-# Packages
-PRODUCT_PACKAGES += \
-    audio.a2dp.default \
-    libasound \
-    libomxil-bellagio \
-    libblt_hw \
-    power.montblanc \
-    audio.usb.default \
-    com.android.future.usb.accessory \
-    libaudioutils \
-    libtinyalsa \
-    SamsungServiceMode \
-    Torch
     
 # HAL
 PRODUCT_PACKAGES += \
