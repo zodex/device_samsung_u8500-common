@@ -55,7 +55,7 @@ BOARD_KERNEL_CMDLINE := "console=ttySAC2,115200 consoleblank=0"
 # Graphics
 BOARD_EGL_CFG := device/samsung/u8500-common/configs/egl.cfg
 USE_OPENGL_RENDERER := true
-COMMON_GLOBAL_CFLAGS += -DEGL_NEEDS_FNW -DFORCE_SCREENSHOT_CPU_PATH
+COMMON_GLOBAL_CFLAGS += -DEGL_NEEDS_FNW
 
 # Wifi
 BOARD_WLAN_DEVICE                := bcmdhd
