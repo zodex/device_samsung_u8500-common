@@ -1,4 +1,2 @@
-key 115   VOLUME_UP         WAKE
-key 114   VOLUME_DOWN       WAKE
-key 116   POWER             WAKE
-key 172   HOME              WAKE_DROPPED
+key 158   BACK		VIRTUAL
+key 139   MENU		VIRTUAL
