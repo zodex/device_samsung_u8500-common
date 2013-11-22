@@ -184,6 +184,15 @@
     <!-- LUN file to be used by legacy USB manager.
     The existence of this file will be used to determine in the
     legacy USB manager should be started. -->
-    <string name="config_legacyUmsLunFile">/sys/devices/virtual/android_usb/android0/f_mass_storage/lun0/file</string>
+    <string name="config_legacyUmsLunFile">/sys/devices/platform/musb-ux500.0/musb-hdrc/gadget/lun%d/file</string>
+	
+	<!-- Disable the home key unlock setting -->
+    <bool name="config_disableHomeUnlockSetting">false</bool>
+
+    <!-- Maximum number of supported users -->
+    <integer name="config_multiuserMaximumUsers">4</integer>
+	
+	<!-- Boolean to enable stk functionality on Samsung phones -->
+    <bool name="config_samsung_stk">true</bool>
     
 </resources>
