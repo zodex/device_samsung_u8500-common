@@ -19,7 +19,7 @@ DEVICE_PACKAGE_OVERLAYS := $(COMMON_PATH)/overlay
 
 # Init files
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/rootdir/lpm.rc:root/lpm.rc
+    $(COMMON_PATH)/rootdir/lpm.rc:root/lpm.rc
 
 # STE
 PRODUCT_COPY_FILES += \
