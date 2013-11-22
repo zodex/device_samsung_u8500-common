@@ -66,6 +66,7 @@ PRODUCT_PACKAGES += \
     com.android.future.usb.accessory \
     libasound \
     lights.montblanc \
+    power.montblanc \
     libomxil-bellagio \
     libblt_hw \
     libaudioutils \
