@@ -31,6 +31,9 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(COMMON_PATH)/configs/asound.conf:system/etc/asound.conf \
     $(COMMON_PATH)/configs/Volume.db:system/etc/Volume.db
+	
+# Alsa
+$(call inherit-product, device/samsung/u8500-common/libasound/alsa-lib-products.mk)
 
 # Vold and Storage
 PRODUCT_COPY_FILES += \
@@ -62,6 +65,8 @@ PRODUCT_PACKAGES += \
     audio.a2dp.default \
     audio.usb.default \
     com.android.future.usb.accessory \
+    libasound \
+    lights.montblanc \
     libaudioutils \
     libtinyalsa \
     SamsungServiceMode \
@@ -133,7 +138,6 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.sip.xml:system/etc/permissions/android.software.sip.xml \
     frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
     packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:system/etc/permissions/android.software.live_wallpaper.xml
-
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=131072 \
