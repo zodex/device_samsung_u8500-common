@@ -29,7 +29,8 @@ PRODUCT_COPY_FILES += \
 
 # Audio
 PRODUCT_COPY_FILES += \
-    $(COMMON_PATH)/configs/asound.conf:system/etc/asound.conf
+    $(COMMON_PATH)/configs/asound.conf:system/etc/asound.conf \
+    $(COMMON_PATH)/configs/Volume.db:system/etc/Volume.db
 	
 # Alsa
 $(call inherit-product, device/samsung/u8500-common/libasound/alsa-lib-products.mk)
@@ -86,6 +87,7 @@ PRODUCT_PACKAGES += \
 
 # OMX
 PRODUCT_COPY_FILES += \
+    $(COMMON_PATH)/configs/02omxsym:system/etc/init.d/02omxsym \
     $(COMMON_PATH)/configs/media_codecs.xml:system/etc/media_codecs.xml \
     $(COMMON_PATH)/configs/media_profiles.xml:system/etc/media_profiles.xml
 
