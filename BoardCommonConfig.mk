@@ -99,11 +99,8 @@ BOARD_USES_SEPERATED_AUDIO_INPUT := true
 COMMON_GLOBAL_CFLAGS += -DMR0_AUDIO_BLOB
 BOARD_USES_LIBMEDIA_WITH_AUDIOPARAMETER := true
 
-# Vold
+# USB Mounting
 TARGET_USE_CUSTOM_LUN_FILE_PATH := "/sys/devices/platform/musb-ux500.0/musb-hdrc/gadget/lun%d/file"
-BOARD_VOLD_MAX_PARTITIONS := 25
-BOARD_VOLD_EMMC_SHARES_DEV_MAJOR := true
-BOARD_VOLD_DISC_HAS_MULTIPLE_MAJORS := true
 
 # Charging mode
 BOARD_CHARGER_ENABLE_SUSPEND := true
@@ -112,7 +109,7 @@ BOARD_CHARGING_MODE_BOOTING_LPM := /sys/devices/virtual/power_supply/battery/lpm
 # Recovery
 BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/samsung/u8500-common/recovery/recovery_keys.c
 BOARD_CUSTOM_GRAPHICS := ../../../device/samsung/u8500-common/recovery/graphics.c
-BOARD_UMS_LUNFILE := "/sys/devices/platform/musb-ux500.0/musb-hdrc/gadget/lun%d/file"
+BOARD_UMS_LUNFILE := "/sys/class/android_usb/android0/f_mass_storage/lun0/file"
 BOARD_USES_MMCUTILS := true
 BOARD_HAS_NO_MISC_PARTITION := true
 BOARD_HAS_NO_SELECT_BUTTON := true
