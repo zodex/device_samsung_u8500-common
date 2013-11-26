@@ -103,10 +103,8 @@ typedef uint16_t GpsLocationFlags;
 #define GPS_CAPABILITY_SINGLE_SHOT      0x0000008
 /** GPS supports on demand time injection */
 #define GPS_CAPABILITY_ON_DEMAND_TIME   0x0000010
-#ifndef DISABLE_GEOFENCE
 /** GPS supports Geofencing  */
 #define GPS_CAPABILITY_GEOFENCING       0x0000020
-#endif
 
 /** Flags used to specify which aiding data to delete
     when calling delete_aiding_data(). */
@@ -232,12 +230,10 @@ typedef uint16_t AGpsStatusValue;
  */
 #define AGPS_RIL_INTERFACE      "agps_ril"
 
-#ifndef DISABLE_GEOFENCE
 /**
  * Name for the GPS_Geofencing interface.
  */
 #define GPS_GEOFENCING_INTERFACE   "gps_geofencing"
-#endif
 
 /**
  * The GPS chipset can use Psc for AGPS.
@@ -699,7 +695,6 @@ typedef struct {
     void (*update_network_availability) (int avaiable, const char* apn);
 } AGpsRilInterface;
 
-#ifndef DISABLE_GEOFENCE
 /**
  * GPS Geofence.
  *      There are 3 states associated with a Geofence: Inside, Outside, Unknown.
@@ -952,7 +947,6 @@ typedef struct {
     */
    void (*remove_geofence_area) (int32_t geofence_id);
 } GpsGeofencingInterface;
-#endif /* DISABLE GEOFENCE */
 __END_DECLS
 
 #endif /* ANDROID_INCLUDE_HARDWARE_GPS_H */
