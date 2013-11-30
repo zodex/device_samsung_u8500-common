@@ -115,6 +115,30 @@ RECOVERY_FSTAB_VERSION := 2
 #BOARD_TOUCH_RECOVERY := true
 BOARD_RECOVERY_SWIPE := true
 
+# TWRP flags
+DEVICE_RESOLUTION := 480x800
+RECOVERY_GRAPHICS_USE_LINELENGTH := true
+#RECOVERY_SDCARD_ON_DATA := true
+TW_HAS_NO_RECOVERY_PARTITION := true
+TW_FLASH_FROM_STORAGE := true
+TW_EXTERNAL_STORAGE_PATH := "/storage/sdcard1"
+TW_EXTERNAL_STORAGE_MOUNT_POINT := "storage/sdcard1"
+TW_DEFAULT_EXTERNAL_STORAGE := true
+#TW_INCLUDE_CRYPTO := true
+TW_INCLUDE_JB_CRYPTO := true
+TW_CRYPTO_FS_TYPE := "ext4"
+TW_CRYPTO_REAL_BLKDEV := "/dev/block/mmcblk0p5"
+TW_CRYPTO_MNT_POINT := "/data"
+TW_CRYPTO_FS_OPTIONS := "noatime,nosuid,nodev,discard,noauto_da_alloc,journal_async_commit,errors=panic"
+TW_CRYPTO_FS_FLAGS := "0x00000406"
+TW_CRYPTO_KEY_LOC := "/efs/metadata"
+TW_INCLUDE_FUSE_EXFAT := true
+TW_BOARD_CUSTOM_GRAPHICS := ../../../device/samsung/u8500-common/recovery/graphics.c
+TW_BRIGHTNESS_PATH := /sys/class/backlight/panel/brightness
+TW_MAX_BRIGHTNESS := 255
+TW_NO_USB_STORAGE := true
+
+
 # Camera
 BOARD_CAMERA_HAVE_ISO := true
 COMMON_GLOBAL_CFLAGS += -DHAVE_ISO
