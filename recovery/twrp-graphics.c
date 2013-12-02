@@ -713,6 +713,7 @@ int gr_fb_blank(int blank)
     ret = ioctl(gr_fb_fd, FBIOBLANK, blank ? FB_BLANK_POWERDOWN : FB_BLANK_UNBLANK);
     if (ret < 0)
         perror("ioctl(): blank");
+        return ret;
 }
 
 int gr_get_surface(gr_surface* surface)
