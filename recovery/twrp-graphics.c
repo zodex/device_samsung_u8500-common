@@ -706,7 +706,7 @@ gr_pixel *gr_fb_data(void)
     return (unsigned short *) gr_mem_surface.data;
 }
 
-void gr_fb_blank(int blank)
+int gr_fb_blank(int blank)
 {
     int ret;
 
