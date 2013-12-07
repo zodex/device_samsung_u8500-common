@@ -87,7 +87,6 @@ BOARD_BLUEDROID_VENDOR_CONF := device/samsung/u8500-common/bluetooth/vnd_u8500.t
 # RIL
 BOARD_PROVIDES_LIBRIL := true
 BOARD_MODEM_TYPE := xmm6260
-BOARD_RIL_CLASS := ../../../device/samsung/u8500-common/ril/
 BOARD_MOBILEDATA_INTERFACE_NAME := "pdp0"
 
 # Audio
