@@ -843,7 +843,7 @@ public class SamsungU8500RIL extends RIL implements CommandsInterface {
 
         // When the modem responds Phone.NT_MODE_GLOBAL, it means Phone.NT_MODE_WCDMA_PREF
         if (response[0] == Phone.NT_MODE_GLOBAL) {
-            RLog.d(RILJ_LOG_TAG, "Overriding network type response from GLOBAL to WCDMA preferred");
+            Rlog.d(RILJ_LOG_TAG, "Overriding network type response from GLOBAL to WCDMA preferred");
             response[0] = Phone.NT_MODE_WCDMA_PREF;
         }
 
