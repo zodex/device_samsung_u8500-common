@@ -69,9 +69,6 @@ public class SamsungU8500RIL extends RIL implements CommandsInterface {
     }
 
     // SAMSUNG STATES
-    static final int RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST = 11012;
-    static final int RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST_2 = 11011;
-	
     static final int RIL_REQUEST_GET_CELL_BROADCAST_CONFIG = 10002;
 
     static final int RIL_REQUEST_SEND_ENCODED_USSD = 10005;
@@ -464,19 +461,19 @@ public class SamsungU8500RIL extends RIL implements CommandsInterface {
 
         switch(response) {
         /*
-				cat libs/telephony/ril_unsol_commands.h \
-				| egrep "^ *{RIL_" \
-				| sed -re 's/\{([^,]+),[^,]+,([^}]+).+/case \1: \2(rr, p); break;/'
+	 cat libs/telephony/ril_unsol_commands.h \
+	 egrep "^ *{RIL_" \
+	 sed -re 's/\{([^,]+),[^,]+,([^}]+).+/case \1: \2(rr, p); break;/'
          */
 
-		case RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED: ret =  responseVoid(p); break;
-		case RIL_UNSOL_RESPONSE_NEW_BROADCAST_SMS: ret = responseString(p); break;
-		case RIL_UNSOL_RIL_CONNECTED: ret = responseInts(p); break;
-		case RIL_UNSOL_DUN_PIN_CONTROL_SIGNAL: ret = responseVoid(p); break;
-		case RIL_UNSOL_DATA_SUSPEND_RESUME: ret = responseInts(p); break;
-		case RIL_UNSOL_STK_CALL_CONTROL_RESULT: ret = responseVoid(p); break;
-		case RIL_UNSOL_TWO_MIC_STATE: ret = responseInts(p); break;
-		case RIL_UNSOL_WB_AMR_STATE: ret = responseInts(p); break;
+	case RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED: ret =  responseVoid(p); break;
+	case RIL_UNSOL_RESPONSE_NEW_BROADCAST_SMS: ret = responseString(p); break;
+	case RIL_UNSOL_RIL_CONNECTED: ret = responseInts(p); break;
+	case RIL_UNSOL_DUN_PIN_CONTROL_SIGNAL: ret = responseVoid(p); break;
+	case RIL_UNSOL_DATA_SUSPEND_RESUME: ret = responseInts(p); break;
+	case RIL_UNSOL_STK_CALL_CONTROL_RESULT: ret = responseVoid(p); break;
+	case RIL_UNSOL_TWO_MIC_STATE: ret = responseInts(p); break;
+	case RIL_UNSOL_WB_AMR_STATE: ret = responseInts(p); break;
 		
         case RIL_UNSOL_NITZ_TIME_RECEIVED: ret =  responseString(p); break;
         case RIL_UNSOL_SIGNAL_STRENGTH: ret = responseSignalStrength(p); break;
@@ -490,8 +487,6 @@ public class SamsungU8500RIL extends RIL implements CommandsInterface {
         case RIL_UNSOL_O2_HOME_ZONE_INFO: ret = responseVoid(p); break;
         case RIL_UNSOL_DEVICE_READY_NOTI: ret = responseVoid(p); break;
         case RIL_UNSOL_GPS_NOTI: ret = responseVoid(p); break; // Ignored in TW RIL.
-        case RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST: ret = responseVoid(p); break;
-        case RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST_2: ret = responseVoid(p); break;
         case RIL_UNSOL_AM: ret = responseString(p); break;
 
         default:
