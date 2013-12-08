@@ -25,28 +25,11 @@ import static android.telephony.TelephonyManager.NETWORK_TYPE_HSDPA;
 import static android.telephony.TelephonyManager.NETWORK_TYPE_HSUPA;
 import static android.telephony.TelephonyManager.NETWORK_TYPE_HSPA;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
-import android.os.Handler;
-import android.os.Message;
-import android.os.AsyncResult;
-import android.os.Parcel;
-import android.os.SystemProperties;
-import android.telephony.PhoneNumberUtils;
-import android.telephony.SignalStrength;
-import static com.android.internal.telephony.RILConstants.*;
 
 import com.android.internal.telephony.CommandException;
 import com.android.internal.telephony.dataconnection.DataCallResponse;
 import com.android.internal.telephony.dataconnection.DcFailCause;
-import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
-import com.android.internal.telephony.gsm.SuppServiceNotification;
 import com.android.internal.telephony.RILConstants;
-import com.android.internal.telephony.cdma.CdmaCallWaitingNotification;
-import com.android.internal.telephony.cdma.CdmaInformationRecords;
 import com.android.internal.telephony.cdma.CdmaInformationRecords.CdmaSignalInfoRec;
 import com.android.internal.telephony.cdma.SignalToneUtil;
 
@@ -856,6 +839,12 @@ public class SamsungU8500RIL extends RIL implements CommandsInterface {
             // we'll assume that it should be the value we want the
             // vendor ril to take if we reestablish a connection to it.
             mPreferredNetworkType = response[0];
+        }
+
+        // When the modem responds Phone.NT_MODE_GLOBAL, it means Phone.NT_MODE_WCDMA_PREF
+        if (response[0] == Phone.NT_MODE_GLOBAL) {
+            Log.d(LOG_TAG, "Overriding network type response from GLOBAL to WCDMA preferred");
+            response[0] = Phone.NT_MODE_WCDMA_PREF;
         }
 
         return response;
