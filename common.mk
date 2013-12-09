@@ -29,7 +29,7 @@ PRODUCT_PACKAGES += \
     power.montblanc \
     lights.montblanc \
     SamsungServiceMode \
-    Torch
+    OmniTorch
 
 # Init files
 PRODUCT_COPY_FILES += \
