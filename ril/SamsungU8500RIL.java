@@ -469,15 +469,6 @@ public class SamsungU8500RIL extends RIL implements CommandsInterface {
 				| sed -re 's/\{([^,]+),[^,]+,([^}]+).+/case \1: \2(rr, p); break;/'
          */
 
-		case RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED: ret =  responseVoid(p); break;
-		case RIL_UNSOL_RESPONSE_NEW_BROADCAST_SMS: ret = responseString(p); break;
-		case RIL_UNSOL_RIL_CONNECTED: ret = responseInts(p); break;
-		case RIL_UNSOL_DUN_PIN_CONTROL_SIGNAL: ret = responseVoid(p); break;
-		case RIL_UNSOL_DATA_SUSPEND_RESUME: ret = responseInts(p); break;
-		case RIL_UNSOL_STK_CALL_CONTROL_RESULT: ret = responseVoid(p); break;
-		case RIL_UNSOL_TWO_MIC_STATE: ret = responseInts(p); break;
-		case RIL_UNSOL_WB_AMR_STATE: ret = responseInts(p); break;
-		
         case RIL_UNSOL_NITZ_TIME_RECEIVED: ret =  responseString(p); break;
         case RIL_UNSOL_SIGNAL_STRENGTH: ret = responseSignalStrength(p); break;
         case RIL_UNSOL_CDMA_INFO_REC: ret = responseCdmaInformationRecord(p); break;
@@ -504,55 +495,6 @@ public class SamsungU8500RIL extends RIL implements CommandsInterface {
         }
 
         switch(response) {
-		case RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED:
-                /* has bonus radio state int */
-                int state = p.readInt();
-                Rlog.d(RILJ_LOG_TAG, "Radio state: " + state);
-
-                switch (state) {
-                    case 2:
-                        // RADIO_UNAVAILABLE
-                        state = 1;
-                        break;
-                    case 3:
-                        // RADIO_ON
-                        state = 10;
-                        break;
-                    case 4:
-                        // RADIO_ON
-                        state = 10;
-                        // When SIM is PIN-unlocked, RIL doesn't respond with RIL_UNSOL_RESPONSE_SIM_STATUS_CHANGED.
-                        // We notify the system here.
-                        Rlog.d(RILJ_LOG_TAG, "SIM is PIN-unlocked now");
-                        if (mIccStatusChangedRegistrants != null) {
-                            mIccStatusChangedRegistrants.notifyRegistrants();
-                        }
-                        break;
-                }
-                RadioState newState = getRadioStateFromInt(state);
-                Rlog.d(RILJ_LOG_TAG, "New Radio state: " + state + " (" + newState.toString() + ")");
-                switchToRadioState(newState);
-                break;
-		
-		case RIL_UNSOL_RESPONSE_NEW_BROADCAST_SMS:
-                if (RILJ_LOGD) unsljLogRet(response, ret);
-
-                if (mGsmBroadcastSmsRegistrant != null) {
-                    mGsmBroadcastSmsRegistrant
-                        .notifyRegistrant(new AsyncResult(null, ret, null));
-                }
-                break;
-		
-		            case RIL_UNSOL_RIL_CONNECTED:
-                if (RILJ_LOGD) unsljLogRet(response, ret);
-
-                // Initial conditions
-                setRadioPower(false, null);
-                sendPreferedNetworktype(mPreferredNetworkType, null);
-                setCdmaSubscriptionSource(mCdmaSubscription, null);
-                notifyRegistrantsRilConnectionChanged(((int[])ret)[0]);
-                break;
-		
         case RIL_UNSOL_HSDPA_STATE_CHANGED:
             if (RILJ_LOGD) unsljLog(response);
 
