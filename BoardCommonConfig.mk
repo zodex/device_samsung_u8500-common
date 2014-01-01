@@ -87,7 +87,7 @@ BOARD_RIL_CLASS := ../../../device/samsung/u8500-common/ril/
 
 # Audio
 BOARD_USES_ALSA_AUDIO := true
-COMMON_GLOBAL_CFLAGS += -DMR0_AUDIO_BLOB
+COMMON_GLOBAL_CFLAGS += -DMR0_AUDIO_BLOB -DMR1_AUDIO_BLOB
 
 # Enable WEBGL in WebKit
 ENABLE_WEBGL := true
