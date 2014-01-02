@@ -153,7 +153,8 @@ $(call inherit-product, frameworks/native/build/phone-hdpi-512-dalvik-heap.mk)
 # Keylayout
 PRODUCT_COPY_FILES += \
     $(COMMON_PATH)/usr/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
-    $(COMMON_PATH)/usr/keylayout/sec_touchkey.kl:system/usr/keylayout/sec_touchkey.kl
+    $(COMMON_PATH)/usr/keylayout/sec_touchkey.kl:system/usr/keylayout/sec_touchkey.kl \
+    $(COMMON_PATH)/usr/keylayout/simple_remote.kl:system/usr/keylayout/simple_remote.kl \
 
 # Use the non-open-source parts, if they're present
 include vendor/samsung/u8500-common/vendor-common.mk
