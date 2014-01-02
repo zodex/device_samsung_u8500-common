@@ -65,8 +65,6 @@ $(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/firmware/bcm4330
 # Gps
 PRODUCT_COPY_FILES += \
     $(COMMON_PATH)/configs/sirfgps.conf:system/etc/sirfgps.conf
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.com.google.locationfeatures=1
     
 # HAL
 PRODUCT_PACKAGES += \
