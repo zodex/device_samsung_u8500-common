@@ -1,5 +1,9 @@
 /*
  * Copyright (C) 2008 The Android Open Source Project
+ * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+ *
+ * Not a Contribution, Apache license notifications and license are retained
+ * for attribution purposes only.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,10 +57,17 @@ enum {
     COPYBIT_FORMAT_YCBCR42XMBN  = HAL_PIXEL_FORMAT_YCBCR42XMBN,
     /* STE: Added for YCbCr422R -> RGB888 use-case */
     COPYBIT_FORMAT_YCbCr_422_I  = HAL_PIXEL_FORMAT_YCbCr_422_I,
+
+    COPYBIT_FORMAT_YCbCr_422_SP = 0x10,
+    COPYBIT_FORMAT_YCrCb_420_SP = 0x11,
 };
 
 /* name for copybit_set_parameter */
 enum {
+    /* Default blit destination is offline buffer */
+    /* clients to set this to '1', if blitting to framebuffer */
+    /* and reset to '0', after calling blit/stretch */
+    COPYBIT_BLIT_TO_FRAMEBUFFER = 0,
     /* rotation of the source image in degrees (0 to 359) */
     COPYBIT_ROTATION_DEG    = 1,
     /* plane alpha value */
@@ -67,7 +78,13 @@ enum {
     COPYBIT_TRANSFORM       = 4,
     /* blurs the copied bitmap. The amount of blurring cannot be changed
      * at this time. */
-    COPYBIT_BLUR            = 5
+    COPYBIT_BLUR            = 5,
+    /* Blend mode */
+    COPYBIT_BLEND_MODE  = 6,
+    /* FB width */
+    COPYBIT_FRAMEBUFFER_WIDTH = 7,
+    /* FB height */
+    COPYBIT_FRAMEBUFFER_HEIGHT = 8,
 };
 
 /* values for copybit_set_parameter(COPYBIT_TRANSFORM) */
@@ -88,6 +105,20 @@ enum {
 enum {
     COPYBIT_DISABLE = 0,
     COPYBIT_ENABLE  = 1
+};
+
+/*
+ * copybit blending values. same as HWC blending values
+ */
+enum {
+    /* no blending */
+    COPYBIT_BLENDING_NONE     = 0x0100,
+
+    /* ONE / ONE_MINUS_SRC_ALPHA */
+    COPYBIT_BLENDING_PREMULT  = 0x0105,
+
+    /* SRC_ALPHA / ONE_MINUS_SRC_ALPHA */
+    COPYBIT_BLENDING_COVERAGE = 0x0405
 };
 
 /* use get_static_info() to query static informations about the hardware */
@@ -114,6 +145,10 @@ struct copybit_image_t {
     void        *base;
     /* handle to the image */
     native_handle_t* handle;
+    /* number of pixels added for the stride */
+    uint32_t    horiz_padding;
+    /* number of pixels added for the vertical stride */
+    uint32_t    vert_padding;
 };
 
 /* Rectangle */
@@ -230,6 +265,31 @@ struct copybit_device_t {
                 struct copybit_rect_t *rect,
                 struct copybit_color_t *color,
                 struct copybit_region_t *region);
+				   
+  /**
+    * Execute the completion of the copybit draw operation.
+    *
+    * @param dev from open
+    *
+    * @return 0 if successful
+    */
+  int (*finish)(struct copybit_device_t *dev);
+
+  /**
+    * Trigger the copybit draw operation(async).
+    *
+    * @param dev from open
+    *
+    * @param fd - gets the fencefd
+    *
+    * @return 0 if successful
+    */
+  int (*flush_get_fence)(struct copybit_device_t *dev, int* fd);
+
+  /* Clears the buffer
+   */
+  int (*clear)(struct copybit_device_t *dev, struct copybit_image_t const *buf,
+               struct copybit_rect_t *rect);
 };
 
 
