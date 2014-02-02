@@ -64,7 +64,6 @@ PRODUCT_PACKAGES += \
     com.android.future.usb.accessory \
     libaudioutils \
     libtinyalsa \
-    SamsungServiceMode \
     Torch
     
 # HAL
