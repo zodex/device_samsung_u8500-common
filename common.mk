@@ -31,6 +31,10 @@ PRODUCT_PACKAGES += \
     SamsungServiceMode \
     Torch
 
+# OTA app
+PRODUCT_PACKAGES += \
+    teamcanjicaCenter
+
 # Init files
 PRODUCT_COPY_FILES += \
     $(COMMON_PATH)/rootdir/lpm.rc:root/lpm.rc
