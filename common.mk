@@ -159,6 +159,10 @@ PRODUCT_COPY_FILES += \
     $(COMMON_PATH)/usr/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
     $(COMMON_PATH)/usr/keylayout/sec_touchkey.kl:system/usr/keylayout/sec_touchkey.kl \
     $(COMMON_PATH)/usr/keylayout/simple_remote.kl:system/usr/keylayout/simple_remote.kl \
+    
+# OTA app
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    teamcanjica.ota.version=1.0
 
 # Use the non-open-source parts, if they're present
 include vendor/samsung/u8500-common/vendor-common.mk
