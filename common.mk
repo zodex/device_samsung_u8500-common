@@ -161,7 +161,7 @@ PRODUCT_COPY_FILES += \
     $(COMMON_PATH)/usr/keylayout/simple_remote.kl:system/usr/keylayout/simple_remote.kl \
     
 # OTA app
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+PRODUCT_PROPERTY_OVERRIDES += \
     teamcanjica.ota.version=1.0
 
 # Use the non-open-source parts, if they're present
