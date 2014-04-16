@@ -140,6 +140,9 @@ TW_NO_USB_STORAGE := true
 TW_NO_REBOOT_BOOTLOADER := true
 TW_HAS_DOWNLOAD_MODE := true
 
+# TWRP fstab
+PRODUCT_COPY_FILES += device/samsung/u8500-common/rootdir/twrp.fstab:recovery/root/etc/twrp.fstab
+
 # STE healthd HAL
 BOARD_HAL_STATIC_LIBRARIES := libhealthd.montblanc
 
