@@ -170,6 +170,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.boot.selinux=disabled
 
+# Storage switch
+ PRODUCT_PROPERTY_OVERRIDES += \
+    persist.sys.vold.switchablepair=sdcard0,sdcard1
+
 # Precise GC data
 PRODUCT_TAGS += dalvik.gc.type-precise
 
