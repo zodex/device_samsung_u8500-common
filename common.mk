@@ -17,93 +17,107 @@ COMMON_PATH := device/samsung/u8500-common
 
 DEVICE_PACKAGE_OVERLAYS := $(COMMON_PATH)/overlay
 
-# Packages
+# Use the Dalvik VM specific for devices with 512 MB of RAM
+$(call inherit-product, frameworks/native/build/phone-hdpi-512-dalvik-heap.mk)
+
+# Our devices are HDPI
+PRODUCT_AAPT_CONFIG := normal hdpi
+PRODUCT_AAPT_PREF_CONFIG := hdpi
+
+# NovaThor Settings
 PRODUCT_PACKAGES += \
-    audio.a2dp.default \
-    audio.usb.default \
-    com.android.future.usb.accessory \
-    libaudioutils \
-    libtinyalsa \
-    libblt_hw \
-    libomxil-bellagio \
-    power.montblanc \
-    lights.montblanc \
-    SamsungServiceMode \
-    Torch
+    NovaThorSettings
 
-# Init files
-PRODUCT_COPY_FILES += \
-    $(COMMON_PATH)/rootdir/lpm.rc:root/lpm.rc
+# Graphics
+PRODUCT_PACKAGES += \
+    libblt_hw
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.opengles.version=131072 \
+    persist.sys.strictmode.disable=1 \
+    debug.sf.hw=1 \
+    debug.hwui.render_dirty_regions=false \
 
-# STE
+# Media
 PRODUCT_COPY_FILES += \
-    $(COMMON_PATH)/configs/cspsa.conf:system/etc/cspsa.conf \
     $(COMMON_PATH)/configs/omxloaders:system/etc/omxloaders \
-    $(COMMON_PATH)/configs/usbid_init.sh:system/bin/usbid_init.sh
-
-# Audio
-PRODUCT_COPY_FILES += \
-    $(COMMON_PATH)/configs/asound.conf:system/etc/asound.conf
-	
-# Alsa
-$(call inherit-product, device/samsung/u8500-common/opensource/libasound/alsa-lib-products.mk)
-
-# Bluetooth configuration files
-PRODUCT_COPY_FILES += \
-    system/bluetooth/data/main.le.conf:system/etc/bluetooth/main.conf
+    $(COMMON_PATH)/configs/media_codecs.xml:system/etc/media_codecs.xml \
+    $(COMMON_PATH)/configs/media_profiles.xml:system/etc/media_profiles.xml
+PRODUCT_PACKAGES += \
+    libomxil-bellagio
 
 # Wifi
 PRODUCT_COPY_FILES += \
-    $(COMMON_PATH)/configs/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf
-
+    $(COMMON_PATH)/configs/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
+PRODUCT_PACKAGES += \
+    libnetcmdiface
 PRODUCT_PROPERTY_OVERRIDES += \
     wifi.interface=wlan0 \
     wifi.supplicant_scan_interval=150
 
 $(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/firmware/bcm4330/device-bcm.mk)
 
-# Gps
+# Bluetooth
 PRODUCT_COPY_FILES += \
-    $(COMMON_PATH)/configs/sirfgps.conf:system/etc/sirfgps.conf
-    
-# HAL
+    $(COMMON_PATH)/bluetooth/bt_vendor.conf:system/etc/bluetooth/bt_vendor.conf \
+    system/bluetooth/data/main.le.conf:system/etc/bluetooth/main.conf
+
+# STE
+PRODUCT_COPY_FILES += \
+    $(COMMON_PATH)/configs/cspsa.conf:system/etc/cspsa.conf \
+    $(COMMON_PATH)/configs/usbid_init.sh:system/bin/usbid_init.sh
+
+# RIL
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.ril.hsxpa=1 \
+    ro.ril.gprsclass=10 \
+    mobiledata.interfaces=pdp0,wlan0,gprs,ppp0 \
+    ro.telephony.ril_class=SamsungU8500RIL \
+    ro.telephony.sends_barcount=1
+
+# Audio
+PRODUCT_COPY_FILES += \
+    $(COMMON_PATH)/configs/asound.conf:system/etc/asound.conf
 PRODUCT_PACKAGES += \
-    libnetcmdiface
+    audio.a2dp.default \
+    audio.usb.default \
+    libaudioutils \
+    libtinyalsa
+
+$(call inherit-product, device/samsung/u8500-common/opensource/libasound/alsa-lib-products.mk)
+
+# Montblanc libs
+PRODUCT_PACKAGES += \
+    lights.montblanc
+
+# USB
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    persist.sys.usb.config=mtp,adb \
+    persist.service.adb.enable=1
 
 # Charger
+PRODUCT_COPY_FILES += \
+    $(COMMON_PATH)/rootdir/lpm.rc:root/lpm.rc
 PRODUCT_PACKAGES += \
     charger \
     charger_res_images
 
-# OMX
-PRODUCT_COPY_FILES += \
-    $(COMMON_PATH)/configs/media_codecs.xml:system/etc/media_codecs.xml \
-    $(COMMON_PATH)/configs/media_profiles.xml:system/etc/media_profiles.xml
-
-# BT
-PRODUCT_COPY_FILES += \
-    $(COMMON_PATH)/bluetooth/01bt:system/etc/init.d/01bt \
-    $(COMMON_PATH)/bluetooth/bt_vendor.conf:system/etc/bluetooth/bt_vendor.conf
+# Misc Packages
 PRODUCT_PACKAGES += \
-    brcm_patchram_plus
+    com.android.future.usb.accessory \
+    SamsungServiceMode \
+    CMAccount \
+    Torch
 
 # Filesystem management tools
 PRODUCT_PACKAGES += \
-    static_busybox \
     make_ext4fs \
     setup_fs
 
-# Live Wallpapers
-PRODUCT_PACKAGES += \
-    Galaxy4 \
-    HoloSpiralWallpaper \
-    LiveWallpapers \
-    LiveWallpapersPicker \
-    MagicSmokeWallpapers \
-    NoiseField \
-    PhaseBeam \
-    VisualizationWallpapers \
-    librs_jni
+# Keylayout
+PRODUCT_COPY_FILES += \
+    $(COMMON_PATH)/configs/usr/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
+    $(COMMON_PATH)/configs/usr/keylayout/sec_touchkey.kl:system/usr/keylayout/sec_touchkey.kl \
+    $(COMMON_PATH)/configs/usr/keylayout/simple_remote.kl:system/usr/keylayout/simple_remote.kl \
 
 # These are the hardware-specific features
 PRODUCT_COPY_FILES += \
@@ -132,30 +146,29 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
     packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:system/etc/permissions/android.software.live_wallpaper.xml
 
+# Live Wallpapers
+PRODUCT_PACKAGES += \
+    Galaxy4 \
+    HoloSpiralWallpaper \
+    LiveWallpapers \
+    LiveWallpapersPicker \
+    MagicSmokeWallpapers \
+    NoiseField \
+    PhaseBeam \
+    VisualizationWallpapers \
+    librs_jni
 
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.opengles.version=131072 \
-    debug.sf.hw=1 \
-    hwui.render_dirty_regions=false
-
-PRODUCT_TAGS += dalvik.gc.type-precise
-
+# Error Checking
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.kernel.android.checkjni=0 \
-    persist.sys.strictmode.disable=1 \
     dalvik.vm.checkjni=false
 
-# Set default USB interface
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mtp
+# Storage switch
+ PRODUCT_PROPERTY_OVERRIDES += \
+    persist.sys.vold.switchablepair=sdcard0,sdcard1
 
-$(call inherit-product, frameworks/native/build/phone-hdpi-512-dalvik-heap.mk)
-
-# Keylayout
-PRODUCT_COPY_FILES += \
-    $(COMMON_PATH)/usr/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
-    $(COMMON_PATH)/usr/keylayout/sec_touchkey.kl:system/usr/keylayout/sec_touchkey.kl \
-    $(COMMON_PATH)/usr/keylayout/simple_remote.kl:system/usr/keylayout/simple_remote.kl \
+# Precise GC data
+PRODUCT_TAGS += dalvik.gc.type-precise
 
 # Use the non-open-source parts, if they're present
 include vendor/samsung/u8500-common/vendor-common.mk
