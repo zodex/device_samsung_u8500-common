@@ -29,8 +29,6 @@ PRODUCT_PACKAGES += \
     NovaThorSettings
 
 # Graphics
-PRODUCT_PACKAGES += \
-    libblt_hw
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=131072 \
     persist.sys.strictmode.disable=1 \
@@ -44,8 +42,6 @@ PRODUCT_COPY_FILES += \
     $(COMMON_PATH)/configs/omxloaders:system/etc/omxloaders \
     $(COMMON_PATH)/configs/media_codecs.xml:system/etc/media_codecs.xml \
     $(COMMON_PATH)/configs/media_profiles.xml:system/etc/media_profiles.xml
-PRODUCT_PACKAGES += \
-    libomxil-bellagio
 
 # Wifi
 PRODUCT_COPY_FILES += \
@@ -86,16 +82,12 @@ PRODUCT_PACKAGES += \
     libaudioutils \
     libtinyalsa
 
-$(call inherit-product, device/samsung/u8500-common/opensource/libasound/alsa-lib-products.mk)
-
-# Montblanc libs
-PRODUCT_PACKAGES += \
-    power.montblanc \
-    lights.montblanc
+# Hardware STEricsson U8500
+$(call inherit-product, hardware/u8500/u8500.mk)
 
 # USB
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mtp,adb \
+    persist.sys.usb.config=mtp \
     persist.service.adb.enable=1
 
 # Charger
