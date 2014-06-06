@@ -49,8 +49,8 @@ on init
 
 on fs
 
-    mount_all /fstab.${ro.hardware}
-    swapon_all /fstab.${ro.hardware}
+    mount_all /fstab.u8500
+    swapon_all /fstab.u8500
 
     setprop ro.crypto.fuse_sdcard true
  

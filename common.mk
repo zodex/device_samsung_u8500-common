@@ -27,7 +27,8 @@ PRODUCT_PACKAGES += \
 
 # U8500 Common init
 PRODUCT_COPY_FILES += \
-    $(COMMON_PATH)/rootdir/init.u8500.rc:root/init.u8500.rc \
+    $(COMMON_PATH)/rootdir/fstab.u8500:root/fstab.u8500 \
+    $(COMMON_PATH)/rootdir/init.u8500-common.rc:root/init.u8500-common.rc \
     $(COMMON_PATH)/rootdir/init.u8500.usb.rc:root/init.u8500.usb.rc
 
 # Graphics
